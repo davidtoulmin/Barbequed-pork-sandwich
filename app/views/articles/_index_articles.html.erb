@@ -1,0 +1,18 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h2><%= article.title %> <small>Raked On: <%= article.created_at.strftime("%Y %m %d")%></small></h2>
+    <p><%= truncate(article.summary, length: 25, separator: ' ') %></p>
+    <% unless article.tag_list.empty? %>
+      <p>Tagged: <%= article.tag_list.join(' ') %></p>
+    <% end %>
+    <div class="btn-group pull-right" role="group">
+      <%= link_to 'Show', article_path(article), class: "btn btn-default" %>
+    </div>
+  </div>
+  <% if article.author %>
+  <div class="panel-footer">By <%=article.author %> sourced from <%=Source.find(article.source.id).name%></div>
+  <% else %>
+  <div class="panel-footer">Sourced from <%=Source.find(article.source.id).name%></div>
+  <% end %>
+</div>
+

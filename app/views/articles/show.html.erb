@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3><%= @article.title %></h3>
+    <% if @article.author %>
+    <h3>By <%= @article.author %> sourced from <%= Source.find(@article.source.id).name %></h3>
+    <% else %>
+    <h3>Sourced from <%=Source.find(@article.source.id).name%></h3>
+    <% end %>
+  </div>
+
+  <div class="panel-body">
+    <p><%= @article.summary %></p>
+    <% if @article.image %>
+      <img src="<%=@article.image%>">
+    <% end %>
+    <p>Original article found <a href="<%=@article.link%>">here</a>
+  </div>
+  <div class="panel-footer">Published <%=@article.pubdate%></div>
+</div>
+
+<div class="btn-group pull-right" role="group">
+    <%= link_to 'Back', articles_path ,class: "btn btn-default" %>
+</div>
+
+
