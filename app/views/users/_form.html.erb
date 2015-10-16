@@ -30,6 +30,10 @@
         <%= f.label :email %><br>
         <%= f.text_field :email, class: 'form-control' %>
       </div>
+      <div class="field">
+        <%= f.label "Get News Feed By Email?" %> <br />
+        <%= f.check_box :opt_in %> <br />
+      </div>      
       <div class="form-group">
         <%= f.label :password %><br>
         <%= f.password_field :password, class: 'form-control' %>
