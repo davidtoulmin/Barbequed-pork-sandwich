@@ -48,7 +48,7 @@ Rails.application.configure do
     :user_name => "skl@student.unimelb.edu.au",
     :password  => "MXpdABQPNNHo9AQpzcAQyw", # SMTP password is any valid API key
     :authentication => 'login', # Mandrill supports 'plain' or 'login'
-    :domain => 'yourdomain.com', # your domain to identify your server when connecting
+    :domain => 'newsdigest.com', # your domain to identify your server when connecting
   }
 
 end

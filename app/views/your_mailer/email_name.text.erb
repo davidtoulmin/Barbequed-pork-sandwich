@@ -1,12 +1,11 @@
 <%= @user.first_name %>,
-
 Thank you for registering!
 
 Edit profile: <%= edit_user_path(@user) %>
 
 <%= @user.first_name %>,
 All Articles
-<%@articles = Article.tagged_with(@user.interest_list, :any => true).to_a%>
+<%@articles = Article.tagged_with(current_user.interest_list, :any => true).to_a%>
 <% @articles.each do |article| %>
   <%= render partial: 'index_articles', locals: {article: article} %>
 <% end %>
