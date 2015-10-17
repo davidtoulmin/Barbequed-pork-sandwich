@@ -82,8 +82,7 @@ Rails.application.configure do
   SMTP_PASSWORD=MXpdABQPNNHo9AQpzcAQyw
   SMTP_USERNAME=skl@student.unimelb.edu.au
 
-Rails.application.configure do
-  ...
+
   config.action_mailer.smtp_settings = {
     address: ENV.fetch("SMTP_ADDRESS"),
     authentication: :plain
@@ -94,6 +93,4 @@ Rails.application.configure do
     user_name: ENV.fetch("SMTP_USERNAME")
   }
   config.action_mailer.default_url_options = { host: ENV["SMTP_DOMAIN"] }
-  ...
-end
 end

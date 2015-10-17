@@ -1,7 +1,9 @@
 # app/mailers/user_mailer.rb
 
 class UserMailer < BaseMandrillMailer
-  def welcome(user)
+
+  def welcome user
+    puts("made it")
     subject = "Welcome to our awesome app!"
     merge_vars = {
       "FIRST_NAME" => user.first_name
