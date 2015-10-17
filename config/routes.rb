@@ -18,5 +18,6 @@ Rails.application.routes.draw do
   post '/user/new', to: 'users#create', as: 'users_new'
   get '/user/destroy', to: 'users#destroy', as: 'users_destroy'
   patch '/user', to: 'users#update', as: 'user_edit'
+  get 'sessions/email', as: :email
 
 end

@@ -27,6 +27,10 @@ class SessionsController < ApplicationController
     redirect_to login_path 
   end
 
+  def email
+    UserMailer.welcome(@current_user)
+  end
+
   # Private controller methods
   private
   def check_params
