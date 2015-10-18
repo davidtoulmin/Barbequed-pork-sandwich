@@ -49,7 +49,7 @@ class SydneyMorningHeraldImporter
      description = interpret_description(item.description)
      #There is no author field, as it is latest news. Define the author
      author = 'SMH'
-
+     puts(item.pubDate)
      #converting the Time class returned to a preffered Date object
      date = (item.pubDate).to_date
      #Defining the source.

@@ -5,7 +5,8 @@ Edit profile: <%= edit_user_path(@user) %>
 
 <%= @user.first_name %>,
 <% count = 0 %>
-<%@articles = Article.tagged_with(@user.interest_list, :any => true).to_a%>
+<% @articles = Article.tagged_with(@user.interest_list, :any => true).to_a %>
+<% @articles = @articles.sort_by { |article| article.pubdate}.reverse %>
 <% @articles.each do |article| %>
   <% if((@user.last_emailed.nil? || (@user.last_emailed < article.pubdate)) && count<=10) %>
     <%= render partial: 'index_articles', locals: {article: article} %>

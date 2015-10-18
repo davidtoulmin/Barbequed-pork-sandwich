@@ -2,7 +2,7 @@
 
 # David Toulmin 638541
 
-class Tagger
+module Tagger
   TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
 
   # Search the summary and title for proper nouns to tag on and add these to the list of tags
@@ -13,6 +13,7 @@ class Tagger
     tags += tag_method_three(article)
     tags += tag_method_four(article)
     tags += tag_method_five(article)
+    list = ""
     tags.uniq.each do |word|
       list += word + ", "
     end
