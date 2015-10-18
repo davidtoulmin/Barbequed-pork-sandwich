@@ -18,6 +18,7 @@ class NYTImporter
   # URL addition for technology json
   API_KEY = '/svc/topstories/v1/technology.json?api-key=545f8930f3a92adfd2018cc65ed06865:6:72784832'
   SOURCE_DESCRIPTION = "With the Times Newswire API, you can get links and metadata for Times articles and blog posts as soon as they are published on NYTimes.com. The Times Newswire API provides an up-to-the-minute stream of published items."
+  TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
   SOURCE_NAME = "NYT"
   NYT_TAGS = ["section","subsection","material_type_facet","kicker","des_facet","org_facet","per_facet","geo_facet"]
 
@@ -68,10 +69,43 @@ class NYTImporter
           @article.source = source_name
           @article.image = image_url
           @article.link = item['url']
+          tag_article @article, item
           # Save article
           @article.save
         end
       end
     end
   end
+
+  # Search the summary and title for proper nouns to tag on and add these to the list of tags
+  private
+  def tag_article article, item
+    tags = []
+    list = ""
+    summary = article.summary
+    tag_data = summary.scan(TAG_SEARCH_REGEXP)
+    tag_data.each do |word|
+      tags.push word[0]
+    end
+    tags.uniq.each do |word|
+      list += word + ", "
+    end
+    # The NYT also has convinient tags in the JSON format, so teg on those as well
+    NYT_TAGS.each do |tag|
+      tag_content = item[tag]
+      if tag_content != ""
+        if tag_content.is_a?(Array)
+          tag_content.each do |tag_subcontent|
+            list += tag_subcontent + ", "
+          end
+        else
+          list += tag_content + ", "
+        end
+      end
+    end
+    article.tag_list = list
+
+  end
+  
+
 end

@@ -3,7 +3,6 @@ class ArticlesController < ApplicationController
   before_action :authenticate_user
   
   include Importer
-  include Tagger
 
   # GET /articles
   # GET /articles.json
@@ -38,12 +37,6 @@ class ArticlesController < ApplicationController
     importers.each do |importer_klass|
       imp = importer_klass.new(date, Date.today)
       imp.scrape
-    end
-    Article.all.each do |a|
-      if a.created_at.to_date >= date
-        tag_article a
-        a.save
-      end
     end
     # Scrape finished, and redirect to articles
     redirect_to '/articles', notice: 'Succesfully scraped for new articles.'

@@ -13,6 +13,7 @@ class NewsAUImporter
 
   # URL for RSS feed
   URL = 'http://feeds.news.com.au/public/rss/2.0/news_national_3354.xml'
+  TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
   SOURCE_NAME = "NewsAU"
   SOURCE_DESCRIPTION = "News.com.au  National: National News Headlines and Australian News from around the Nation"
 
@@ -51,10 +52,28 @@ class NewsAUImporter
             @article = Article.new( image: item.enclosure.url, title: item.title,
                                        summary: item.description, source: source_name,
                                        link: item.link, pubdate: date)
+            tag_article @article
             @article.save
           end
         end
       end
     end
   end
+
+  # Search the summary and title for proper nouns to tag on and add these to the list of tags
+  private
+  def tag_article article
+    tags = []
+    list = ""
+    words = article.summary + ' ' + article.title
+    tag_data = words.scan(TAG_SEARCH_REGEXP)
+    tag_data.each do |word|
+      tags.push word[0]
+    end
+    tags.uniq.each do |word|
+      list += word + ", "
+    end
+    article.tag_list = list
+  end
+
 end

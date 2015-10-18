@@ -16,6 +16,7 @@ class TheBBCImporter
   IMAGE_SEARCH_REGEXP = /<img(.*?)src="http:\/\/ichef(.+?)"/
   # string to complete regexp searched image url
   IMAGE_SEARCH_COMPLETION = "http://ichef"
+  TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
   SOURCE_NAME = "TheBBC"
   SOURCE_DESCRIPTION = "BBC News - Asia: The latest stories from the Asia section of the BBC News web site."
 
@@ -65,10 +66,28 @@ class TheBBCImporter
             # Save article
             @article = Article.new(author: nil, title: item.title, image: @image_url,
               summary: item.description, source: source_name, pubdate: date, link: item.link)
+            tag_article @article
             @article.save
           end
         end
       end
     end
   end
+
+  # Search the summary and title for proper nouns to tag on and add these to the list of tags
+  private
+  def tag_article article
+    tags = []
+    list = ""
+    words = article.summary + ' ' + article.title
+    tag_data = words.scan(TAG_SEARCH_REGEXP)
+    tag_data.each do |word|
+      tags.push word[0]
+    end
+    tags.uniq.each do |word|
+      list += word + ", "
+    end
+    article.tag_list = list
+  end
+
 end
