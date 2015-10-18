@@ -54,8 +54,7 @@ class HeraldSunImporter
         link =  item.link
         description = item.description
         author = "Herald Sun Breaking News"
-        #converting the returned Time object to a more desired Date object
-        date = (item.pubDate).to_date
+        date = (item.pubDate).to_datetime
         #obtaining the articles source url
         #source = "Herald Sun"
         #Searching through the article description for proper nouns to be used as tags.

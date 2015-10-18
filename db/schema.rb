@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151017235430) do
+ActiveRecord::Schema.define(version: 20151018061320) do
 
   create_table "articles", force: :cascade do |t|
     t.integer  "source_id"
     t.string   "title"
     t.string   "author"
     t.text     "summary"
-    t.date     "pubdate"
+    t.datetime "pubdate"
     t.string   "image"
     t.string   "link"
     t.datetime "created_at", null: false
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20151017235430) do
     t.datetime "updated_at",      null: false
     t.string   "password_digest"
     t.boolean  "opt_in"
-    t.date     "last_emailed"
+    t.datetime "last_emailed"
   end
 
 end

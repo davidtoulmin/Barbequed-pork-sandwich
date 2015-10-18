@@ -51,7 +51,7 @@ class SydneyMorningHeraldImporter
      author = 'SMH'
      puts(item.pubDate)
      #converting the Time class returned to a preffered Date object
-     date = (item.pubDate).to_date
+     date = (item.pubDate).to_datetime
      #Defining the source.
      source = 'Sydney Morning Herald'
      #The Sydney Morning Herald does not have a categories, or related type field to extract tags.

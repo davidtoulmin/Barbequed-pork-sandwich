@@ -35,8 +35,8 @@ class NewsAUImporter
       feed = RSS::Parser.parse(rss)
       feed.items.each do |item|
         # Find published date and check it's in range
-        date = item.pubDate.to_date
-        if (@start < date) && (@end >= date)
+        date = item.pubDate.to_datetime
+        if (@start < date.to_date) && (@end >= date.to_date)
           # Check uniqueness
           flag = 1
           Article.all.each do |p|

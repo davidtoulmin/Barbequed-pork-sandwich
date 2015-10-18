@@ -64,7 +64,7 @@ class TheBBCImporter
           if flag == 1
             # Save article
             @article = Article.new(author: nil, title: item.title, image: @image_url,
-              summary: item.description, source: source_name, pubdate: date, link: item.link)
+              summary: item.description, source: source_name, pubdate: item.pubDate.to_datetime, link: item.link)
             @article.save
           end
         end

@@ -49,7 +49,7 @@ class SBSImporter
         # Resolving the summary/description from the description item.
         summary = interpret_description(description)
         #converting the Time class returned to a preffered Date object
-        date = (item.pubDate).to_date
+        date = (item.pubDate).to_datetime
         #SBS Does not have a categories, or related type field to extract tags.
         #So I will extract the proper nouns in the title in an effort to ascertain
         #meaniningful tags related to the articles. A proper noun is one that begins with a capital letter.

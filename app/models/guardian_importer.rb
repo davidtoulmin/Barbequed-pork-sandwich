@@ -63,7 +63,7 @@ class GuardianImporter
         if flag == 1
           # Save article
           article = Article.new(title: a_title, summary: a_summary,
-                                source: a_source, pubdate: a_date,
+                                source: a_source, pubdate: a_date.to_datetime,
                                 image: a_images, author: a_author,
                                 link: a_link)
           article.save

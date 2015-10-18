@@ -8,7 +8,9 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
-    @articles = Article.all.reverse
+    #@articles = Article.all.reverse
+    #Ensuring all articles are displayed from most recent first.
+    @articles = Article.all.sort_by { |article| article.pubdate }.reverse
   end
 
   def my_interests

@@ -53,7 +53,7 @@ class TheAgeVicImporter
             @article.title = item.title
             @article.author = nil
             @article.summary = item.description.gsub(SUMMARY_REGEXP, "")
-            @article.pubdate = date
+            @article.pubdate = item.pubDate.to_datetime
             @article.source = source_name
             @article.image = item.description.scan(IMAGE_REGEXP)[0][0]
             @article.link = item.link

@@ -42,8 +42,8 @@ class NYTImporter
     forecast = JSON.parse(response.body)
     forecast[RESULT_KEY].each do |item|
       # Get publication date and check if it's in range
-      date = Date.parse item['published_date']
-      if (@start < date) && (@end >= date)
+      date = DateTime.parse item['published_date']
+      if (@start < date.to_date) && (@end >= date.to_date)
         image_url = item['multimedia'][0]
         if(image_url!=nil)
           image_url=image_url['url']
@@ -64,7 +64,7 @@ class NYTImporter
           @article.title = item['title']
           @article.author = author
           @article.summary = item['abstract']
-          @article.pubdate = date
+          @article.pubdate = date.to_datetime
           @article.source = source_name
           @article.image = image_url
           @article.link = item['url']
