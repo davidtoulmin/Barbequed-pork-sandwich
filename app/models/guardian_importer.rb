@@ -17,7 +17,6 @@ class GuardianImporter
   API_KEY = '/search?api-key=a8cmjya9kseh5cvx2k2t6dqn&show-fields=all'
   SUMMARY_SEARCHING_REGEXP = /<("[^"]*"|'[^']*'|[^'">])*>/
   SOURCE_DESCRIPTION = "The Guardian news api"
-  TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
   SOURCE_NAME = "TheGuardian"
 
   # A news scrape is initialised with dates to scrape from
@@ -67,27 +66,9 @@ class GuardianImporter
                                 source: a_source, pubdate: a_date,
                                 image: a_images, author: a_author,
                                 link: a_link)
-          tag_article article
           article.save
         end
       end
     end
   end
-
-  # Search the summary and title for proper nouns to tag on and add these to the list of tags
-  private
-  def tag_article article
-    tags = []
-    list = ""
-    words = article.summary + ' ' + article.title
-    tag_data = words.scan(TAG_SEARCH_REGEXP)
-    tag_data.each do |word|
-      tags.push word[0]
-    end
-    tags.uniq.each do |word|
-      list += word + ", "
-    end
-    article.tag_list = list
-  end
-
 end

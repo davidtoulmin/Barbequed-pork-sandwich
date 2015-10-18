@@ -16,7 +16,6 @@ class TheAgeVicImporter
   IMAGE_REGEXP = /img src="(.+)" width/
   SOURCE_NAME = "TheAgeVic"
   SOURCE_DESCRIPTION = "The Age articles: Latest victoria articles. For all the articles, visit http://www.theage.com.au."
-  TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
 
   # A news scrape is initialised with the start and end date, it
   def initialize start_date, end_date
@@ -58,7 +57,6 @@ class TheAgeVicImporter
             @article.source = source_name
             @article.image = item.description.scan(IMAGE_REGEXP)[0][0]
             @article.link = item.link
-            tag_article @article
             # Save article
             @article.save
           end
@@ -66,22 +64,4 @@ class TheAgeVicImporter
       end
     end
   end
-
-  # Search the summary and title for proper nouns to tag on and add these to the list of tags
-  private
-  def tag_article article
-    tags = []
-    list = ""
-    words = article.summary + ' ' + article.title
-    tag_data = words.scan(TAG_SEARCH_REGEXP)
-    tag_data.each do |word|
-      tags.push word[0]
-    end
-    tags.uniq.each do |word|
-      list += word + ", "
-    end
-    article.tag_list = list
-  end
-
-
 end
