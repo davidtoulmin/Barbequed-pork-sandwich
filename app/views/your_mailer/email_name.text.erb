@@ -7,7 +7,7 @@ Edit profile: <%= edit_user_path(@user) %>
 <% count = 0 %>
 <%@articles = Article.tagged_with(@user.interest_list, :any => true).to_a%>
 <% @articles.each do |article| %>
-  <% if(@user.last_emailed.nil? || (@user.last_emailed < article.pubdate)) %>
+  <% if((@user.last_emailed.nil? || (@user.last_emailed < article.pubdate)) && count<=10) %>
     <%= render partial: 'index_articles', locals: {article: article} %>
     <% count = count + 1 %>
   <% end %>

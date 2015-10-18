@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   # Resourceful routes for article
   resources :articles, only: [:show, :index]
   get '/get_articles', to: 'articles#refresh', as: 'scrape_article'
+  get '/admin/scrape', to: 'articles#refresh'
   get '/interests', to: 'articles#my_interests', as: 'interests'
   # Resourceful routes for user
   resource :user, only: [:create,:new,:update,:destroy,:edit]
@@ -19,5 +20,6 @@ Rails.application.routes.draw do
   get '/user/destroy', to: 'users#destroy', as: 'users_destroy'
   patch '/user', to: 'users#update', as: 'user_edit'
   get 'sessions/email', as: :email
+  get '/admin/email', to: 'sessions#email', as: :email_admin
 
 end
