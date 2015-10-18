@@ -4,10 +4,16 @@ Thank you for registering!
 Edit profile: <%= edit_user_path(@user) %>
 
 <%= @user.first_name %>,
-All Articles
+<% count = 0 %>
 <%@articles = Article.tagged_with(@user.interest_list, :any => true).to_a%>
 <% @articles.each do |article| %>
-  <%= render partial: 'index_articles', locals: {article: article} %>
+  <% if(@user.last_emailed.nil? || (@user.last_emailed < article.pubdate)) %>
+    <%= render partial: 'index_articles', locals: {article: article} %>
+    <% count = count + 1 %>
+  <% end %>
 <% end %>
-
-Thank you for registering!
+<% if count == 0 %>
+  Thank you. There are no news articles matching your interests at this time.
+<%else %>
+  Thank you for registering!
+<% end %>  

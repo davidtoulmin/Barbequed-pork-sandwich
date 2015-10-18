@@ -31,6 +31,7 @@ class SessionsController < ApplicationController
      #UserMailer.welcome(current_user).deliver_now
      User.where(opt_in: true).find_each do |user|
       YourMailer.email_name(user).deliver
+      user.update_attribute(:last_emailed, Date.today)
      end
      redirect_to articles_path
      #@users = User.find_by(opt_in: true)
