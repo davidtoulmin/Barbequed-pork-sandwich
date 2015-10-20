@@ -11,7 +11,13 @@ class ArticlesController < ApplicationController
   def index
     #@articles = Article.all.reverse
     #Ensuring all articles are displayed from most recent first.
-    @articles = Article.all.sort_by { |article| article.pubdate }.reverse
+    @articles = Article.all
+    if params[:search]
+      @articles = Article.tagged_with(params[:search], :any => true).to_a
+      #@articles = Article.search(params[:search]).order("created_at DESC")
+    else
+      @articles = Article.all.sort_by { |article| article.pubdate }.reverse
+    end
     #Display 10 articles per page
     @articles = Article.paginate(:page => params[:page], :per_page => 10)
   end

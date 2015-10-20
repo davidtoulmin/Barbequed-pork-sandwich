@@ -2,6 +2,12 @@
 
 <h1>All Articles</h1>
 
+<%= form_tag(articles_path, :method => "get", id: "search-form") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search Articles" %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+
 <div class="digg_pagination">
     <div class="page_info">
       <%= page_entries_info @posts %>
