@@ -6,6 +6,6 @@ class Article < ActiveRecord::Base
   # Articles can have tags
   acts_as_taggable
 
-
+  # Sets 10 articles per page
   self.per_page = 10
 end

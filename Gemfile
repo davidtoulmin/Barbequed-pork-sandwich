@@ -31,7 +31,7 @@ gem 'tzinfo-data'
 # Use acts as taggable on
 gem 'acts-as-taggable-on'
 
-
+# Use will paginate gem for mulitple pages
 gem 'will_paginate', '~> 3.0.5'
 
 group :development, :test do

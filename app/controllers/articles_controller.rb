@@ -12,6 +12,7 @@ class ArticlesController < ApplicationController
     #@articles = Article.all.reverse
     #Ensuring all articles are displayed from most recent first.
     @articles = Article.all.sort_by { |article| article.pubdate }.reverse
+    #Display 10 articles per page
     @articles = Article.paginate(:page => params[:page], :per_page => 10)
   end
 
