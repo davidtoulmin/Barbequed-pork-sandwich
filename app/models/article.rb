@@ -5,5 +5,5 @@ class Article < ActiveRecord::Base
 
   # Articles can have tags
   acts_as_taggable
-
+  # Random comment for stefan testing
 end
