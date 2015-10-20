@@ -4,7 +4,7 @@ class ArticlesController < ApplicationController
   
   include Importer
   include Tagger
-  require 'will_paginate/array'
+  #require 'will_paginate/array'
 
   # GET /articles
   # GET /articles.json
@@ -13,13 +13,17 @@ class ArticlesController < ApplicationController
     #Ensuring all articles are displayed from most recent first.
     @articles = Article.all
     if params[:search]
-      @articles = Article.tagged_with(params[:search], :any => true).to_a
-      #@articles = Article.search(params[:search]).order("created_at DESC")
+      #@articles = Article.tagged_with(params[:search], :any => true)
+      #@articles = Article.find(:all, :conditions => ["name LIKE ?", "%#{params[:search]}%"]) 
+      #@articles = Article.all.find_by(tag_list: params[:search])#.order("created_at DESC")
     else
-      @articles = Article.all.sort_by { |article| article.pubdate }.reverse
+      
+      #@articles = Article.paginate(:page => params[:page], :per_page => 10)
     end
     #Display 10 articles per page
-    @articles = Article.paginate(:page => params[:page], :per_page => 10)
+    
+
+    @articles = Article.all.sort_by { |article| article.pubdate }.reverse
   end
 
   def my_interests

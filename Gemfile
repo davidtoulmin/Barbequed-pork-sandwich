@@ -32,7 +32,7 @@ gem 'tzinfo-data'
 gem 'acts-as-taggable-on'
 
 # Use will paginate gem for mulitple pages
-gem 'will_paginate', '~> 3.0.5'
+#gem 'will_paginate', '~> 3.0.5'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
