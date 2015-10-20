@@ -4,6 +4,7 @@ class ArticlesController < ApplicationController
   
   include Importer
   include Tagger
+  require 'will_paginate/array'
 
   # GET /articles
   # GET /articles.json
@@ -11,6 +12,7 @@ class ArticlesController < ApplicationController
     #@articles = Article.all.reverse
     #Ensuring all articles are displayed from most recent first.
     @articles = Article.all.sort_by { |article| article.pubdate }.reverse
+    @articles = Article.paginate(:page => params[:page], :per_page => 10)
   end
 
   def my_interests

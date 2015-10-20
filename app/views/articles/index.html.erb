@@ -2,7 +2,13 @@
 
 <h1>All Articles</h1>
 
+<div class="digg_pagination">
+    <div class="page_info">
+      <%= page_entries_info @posts %>
+    </div>
+  <%= will_paginate @posts, :container => false %>
+</div>
+
 <% @articles.each do |article| %>
   <%= render partial: 'index_articles', locals: {article: article} %>
 <% end %>
-
