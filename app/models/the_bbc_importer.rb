@@ -52,7 +52,7 @@ class TheBBCImporter
               @image_url = nil
             end
           end
-          # Scrape data from source, using tags from source, and checking for uniqueness
+          # Scrape data from source, and check for uniqueness
           flag = 1
           Article.all.each do |p|
             if p.title == item.title

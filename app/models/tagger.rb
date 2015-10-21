@@ -1,16 +1,24 @@
 # This class searches the summary and title for proper nouns to tag on and add these to the list of tags
 
 # David Toulmin 638541
+require 'rubygems'
+require 'bundler/setup'
+require 'sentimental'
+require 'alchemy_api'
+require 'open_calais'
 
 module Tagger
   TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
+  ALCHEMY_API_KEY = '707ef66211a3537da490c059e76979ef12da2043'
+  OPEN_CALAIS_API_KEY = 'zNaGcoGpoxuJ0Se38IjAvQPvqobVRYbb'
 
   # Search the summary and title for proper nouns to tag on and add these to the list of tags
   def tag_article article
+    list = ""
     tags = []
     tags += tag_method_one(article)
     tags += tag_method_two(article)
-    tags += tag_method_three(article)
+    tags.push(tag_method_three(article))
     tags += tag_method_four(article)
     tags += tag_method_five(article)
     list = ""
@@ -43,44 +51,51 @@ module Tagger
 
   def tag_method_three article
     tags = []
+    Sentimental.load_defaults
+    Sentimental.threshold = 0.1
 
-    return tags
+    article1 = article.summary + article.title
+    s = Sentimental.new
+    result = s.get_sentiment article1
+    if (result == :negative)
+      return "negative"
+    else
+      return "positive"
+    end
   end
 
   def tag_method_four article
     tags = []
+
+    article1 = article.summary + article.title
+    AlchemyAPI.key = ALCHEMY_API_KEY
+    a_entities = AlchemyAPI::EntityExtraction.new.search(text: article1)
+    if a_entities
+      a_entities.each { |e| tags.push "#{e['text']}" }
+    end
+    a_concepts = AlchemyAPI::ConceptTagging.new.search(text: article1)
+    if a_concepts
+      a_concepts.each { |c| tags.push "#{c['text']}" }
+    end
 
     return tags
   end
 
   def tag_method_five article
     tags = []
+    begin
+      article1 = article.summary + article.title
+      oc = OpenCalais::Client.new(api_key: OPEN_CALAIS_API_KEY)
+      oc_response = oc.enrich article1
+      oc_response.tags.each { |t| tags.push "#{t[:name]}" }
+      oc_response.topics.each { |t| tags.push "#{t[:name]}" }
+    rescue
+      # This catches the exception thrown due to having limited access to the
+      # API, due to being on a free account, and I think just ignoring that
+      # exception is fine, it's as if I had a full account, and so never got
+      # that exception
+    end
 
     return tags
   end
-
-=begin
-
-this was some of the code used by the NYT scraper to generate tags from the JSON tags,
-but not all of them have that, and as we're doing tagging seperately from the scraping
-that makes accessing the JSON tags difficult.
-
-  def tag_article article, item
-    # The NYT also has convinient tags in the JSON format, so tag on those as well
-    NYT_TAGS.each do |tag|
-      tag_content = item[tag]
-      if tag_content != ""
-        if tag_content.is_a?(Array)
-          tag_content.each do |tag_subcontent|
-            list += tag_subcontent + ", "
-          end
-        else
-          list += tag_content + ", "
-        end
-      end
-    end
-    article.tag_list = list
-  end
-=end
-
 end

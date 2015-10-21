@@ -50,14 +50,8 @@ class SBSImporter
         summary = interpret_description(description)
         #converting the Time class returned to a preffered Date object
         date = (item.pubDate).to_datetime
-        #SBS Does not have a categories, or related type field to extract tags.
-        #So I will extract the proper nouns in the title in an effort to ascertain
-        #meaniningful tags related to the articles. A proper noun is one that begins with a capital letter.
-        #But does not include the first word or any single capital letters. 
-        tags = title.scan(/(?<!^|\. |\.  )[A-Z][a-z]+/)
         article = Article.new(title: title, summary: summary,
           source: @source, link: link, pubdate: date, image: image)
-        article.tag_list.add(tags)
         #Checking if the article already exists or not.
         if ((Article.find_by title: title) == nil)
           article.save

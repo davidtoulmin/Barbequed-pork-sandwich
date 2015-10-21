@@ -55,17 +55,12 @@ class HeraldSunImporter
         description = item.description
         author = "Herald Sun Breaking News"
         date = (item.pubDate).to_datetime
-        #obtaining the articles source url
-        #source = "Herald Sun"
-        #Searching through the article description for proper nouns to be used as tags.
-        tags = description.scan(/(?<!^|\. |\.  )[A-Z][a-z]+/)    
 
         #Defining a new article object 
         article = Article.new(title: title, summary: description,
           link:link, source: @source, pubdate: date, author: author)
         if ((Article.find_by title: title) == nil)
           #Checking if the article already exists or not.
-          article.tag_list.add(tags)
           article.save
         end
 

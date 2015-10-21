@@ -54,18 +54,10 @@ class SydneyMorningHeraldImporter
      date = (item.pubDate).to_datetime
      #Defining the source.
      source = 'Sydney Morning Herald'
-     #The Sydney Morning Herald does not have a categories, or related type field to extract tags.
-     #So I will extract the proper nouns in the title in an effort to ascertain
-     #meaniningful tags related to the articles. A proper noun is one that begins with a capital letter.
-     #But does not include the first word or any single
-     tags = title.scan(/(?<!^|\. |\.  )[A-Z][a-z]+/) 
-     #This is the Sydney Morning Heral technology feed, so these tags are relevant.
-     tags.push(["technology", "technology-news","reviews","gadgets","consumer electronics"])
      article = Article.new(title: title, summary: description,
       source: @source, link: link, pubdate: date, image: image, author: author)
       #Checking if the article already exists or not.
      if ((Article.find_by title: title) == nil)
-        article.tag_list.add(tags)
         #Saving the article to the database.
         article.save
      end

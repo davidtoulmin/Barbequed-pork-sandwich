@@ -19,7 +19,6 @@ class NYTImporter
   API_KEY = '/svc/topstories/v1/technology.json?api-key=545f8930f3a92adfd2018cc65ed06865:6:72784832'
   SOURCE_DESCRIPTION = "With the Times Newswire API, you can get links and metadata for Times articles and blog posts as soon as they are published on NYTimes.com. The Times Newswire API provides an up-to-the-minute stream of published items."
   SOURCE_NAME = "NYT"
-  NYT_TAGS = ["section","subsection","material_type_facet","kicker","des_facet","org_facet","per_facet","geo_facet"]
 
   # A news scrape is initialised with dates to scrape from
   def initialize start_date, end_date
@@ -48,7 +47,7 @@ class NYTImporter
         if(image_url!=nil)
           image_url=image_url['url']
         end
-          # Scrape data from source, using tags from source, and checking for uniqueness
+          # Scrape data from source, and check for uniqueness
         author = item['byline'].gsub('By ','').split(/(\W)/).map(&:capitalize).join
         flag = 1
         Article.all.each do |p|

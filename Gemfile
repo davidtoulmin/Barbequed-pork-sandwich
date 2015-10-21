@@ -30,6 +30,11 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'tzinfo-data'
 # Use acts as taggable on
 gem 'acts-as-taggable-on'
+# used for creating tags
+gem 'open_calais'
+gem 'sentimental'
+gem 'alchemy-api-rb', :require => 'alchemy_api'
+gem 'indico'
 
 # Use will paginate gem for mulitple pages
 #gem 'will_paginate', '~> 3.0.5'
