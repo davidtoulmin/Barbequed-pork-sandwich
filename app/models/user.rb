@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   validates :password, :presence => true,
                        :confirmation => true,
                        :length => {:within => 8..40},
-                       :on => :update        
+                       :on => :update
 
   # Users can have interests
   acts_as_taggable_on :interests

@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
   def unauth
   end
 
-  # Find a user with the password and username pair, log in that user if they exist 
+  # Find a user with the password and username pair, log in that user if they exist
   def login
     # Find a user with params
     user = User.authenticate(@credentials[:password], @credentials[:username])
@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
   # Log out the user in the session and redirect to the unauth thing
   def logout
     log_out
-    redirect_to login_path 
+    redirect_to login_path
   end
 
   def email
@@ -36,7 +36,7 @@ class SessionsController < ApplicationController
      end
      redirect_to articles_path
      #@users = User.find_by(opt_in: true)
-     #@users.each do |user| 
+     #@users.each do |user|
       #  YourMailer.email_name(user).deliver
       #  redirect_to articles_path
      #end

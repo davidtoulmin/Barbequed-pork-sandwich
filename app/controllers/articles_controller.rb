@@ -14,7 +14,7 @@ class ArticlesController < ApplicationController
     @articles = Article.all
     if params[:search]
       #@articles = Article.tagged_with(params[:search], :any => true)
-      #@articles = Article.find(:all, :conditions => ["name LIKE ?", "%#{params[:search]}%"]) 
+      #@articles = Article.find(:all, :conditions => ["name LIKE ?", "%#{params[:search]}%"])
       #@articles = Article.all.find_by(tag_list: params[:search])#.order("created_at DESC")
     else
       
