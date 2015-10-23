@@ -23,6 +23,9 @@ class ArticlesController < ApplicationController
     #Display 10 articles per page
     
 
+    
+
+
     @articles = Article.all.sort_by { |article| article.pubdate }.reverse
   end
 

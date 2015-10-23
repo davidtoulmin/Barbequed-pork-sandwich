@@ -41,3 +41,14 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.cache
+*.sqlite3
+db/development.sqlite3
+*.lock
+log/development.log
+*.pid
+*.sqlite3
+*.lock
+*.log
+tmp/pids/server.pid
+*.sqlite3
