@@ -30,6 +30,7 @@ class TheAgePoliticsImporter
 
   # Define a scrape method that imports data from an RSS feed
   def scrape
+    article_list = []
     # Open and parse the rss feed
     url= RSS_URL
     open(url) do |rss|
@@ -59,9 +60,11 @@ class TheAgePoliticsImporter
             @article.link = item.link
             # Save article
             @article.save
+            article_list.push(@article.id)
           end
         end
       end
     end
+    return article_list
   end
 end

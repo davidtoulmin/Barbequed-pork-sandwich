@@ -16,7 +16,6 @@ class NewsAUImporter
   SOURCE_NAME = "NewsAU"
   SOURCE_DESCRIPTION = "News.com.au  National: National News Headlines and Australian News from around the Nation"
 
-
   # A news scrape is initialised with dates to scrape from
   def initialize start_date, end_date
     @start = start_date
@@ -30,7 +29,8 @@ class NewsAUImporter
 
   # Scrape the source for news articles between the given dates
   def scrape
-  #open the rss feed
+    article_list = []
+    #open the rss feed
     open(URL) do |rss|
       feed = RSS::Parser.parse(rss)
       feed.items.each do |item|
@@ -52,9 +52,11 @@ class NewsAUImporter
                                        summary: item.description, source: source_name,
                                        link: item.link, pubdate: date)
             @article.save
+            article_list.push(@article.id)
           end
         end
       end
     end
+    return article_list
   end
 end

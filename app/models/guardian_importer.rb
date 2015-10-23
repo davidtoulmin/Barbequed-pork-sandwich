@@ -38,6 +38,7 @@ class GuardianImporter
     response = http.send_request('GET', API_KEY)
     json_data = JSON.parse(response.body)
     article_list = json_data['response']['results']
+    processed_articles = []
     article_list.each do |item|
       # Find published date and check it's in range
       a_date = DateTime.parse(item['webPublicationDate'])
@@ -66,9 +67,11 @@ class GuardianImporter
                                 source: a_source, pubdate: a_date.to_datetime,
                                 image: a_images, author: a_author,
                                 link: a_link)
-          article.save
+          processed_articles.push(article.id) if article.save
         end
+
       end
     end
+    return processed_articles
   end
 end

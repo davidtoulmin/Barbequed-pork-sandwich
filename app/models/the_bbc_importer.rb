@@ -19,7 +19,6 @@ class TheBBCImporter
   SOURCE_NAME = "TheBBC"
   SOURCE_DESCRIPTION = "BBC News - Asia: The latest stories from the Asia section of the BBC News web site."
 
-
   # A news scrape is initialised with dates to scrape from
   def initialize start_date, end_date
     @start = start_date
@@ -33,6 +32,7 @@ class TheBBCImporter
 
   # Define a scrape method that imports data from an RSS feed
   def scrape
+    article_list = []
     # Open and parse the rss feed
     url= RSS_URL
     open(url) do |rss|
@@ -66,9 +66,11 @@ class TheBBCImporter
             @article = Article.new(author: nil, title: item.title, image: @image_url,
               summary: item.description, source: source_name, pubdate: item.pubDate.to_datetime, link: item.link)
             @article.save
+            article_list.push(@article.id)
           end
         end
       end
     end
+    return article_list
   end
 end

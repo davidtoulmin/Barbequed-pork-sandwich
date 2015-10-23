@@ -33,6 +33,7 @@ class NYTImporter
 
   # Define a scrape method that imports data from a JSON feed
   def scrape
+    article_list = []
     # Open and parse the JSON feed
     uri = URI.parse(URL)
     http = Net::HTTP.new(uri.host, uri.port)
@@ -69,8 +70,10 @@ class NYTImporter
           @article.link = item['url']
           # Save article
           @article.save
+          article_list.push(@article.id)
         end
       end
     end
+    return article_list
   end
 end

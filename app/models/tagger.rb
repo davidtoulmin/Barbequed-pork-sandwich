@@ -16,16 +16,23 @@ module Tagger
   def tag_article article
     list = ""
     tags = []
-    tags += tag_method_one(article)
-    tags += tag_method_two(article)
-    tags.push(tag_method_three(article))
-    tags += tag_method_four(article)
-    tags += tag_method_five(article)
-    list = ""
+    method_one = Thread.new { tags += tag_method_one(article)}
+    method_two = Thread.new { tags += tag_method_two(article)}
+    method_three = Thread.new { tags.push(tag_method_three(article))}
+    method_four = Thread.new { tags += tag_method_four(article)}
+    method_five = Thread.new { tags += tag_method_five(article)}
+
+    method_one.join
+    method_two.join
+    method_three.join
+    method_four.join
+    method_five.join
+
     tags.uniq.each do |word|
       list += word + ", "
     end
     article.tag_list = list
+    article.save
   end
 
   private

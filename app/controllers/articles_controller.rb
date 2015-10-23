@@ -50,15 +50,21 @@ class ArticlesController < ApplicationController
       end
     end
     # Itterate through importers, initialising them, and scraping
+    new_articles = []
     importers.each do |importer_klass|
       imp = importer_klass.new(date, Date.today)
-      imp.scrape
+      new_articles.concat(imp.scrape)
     end
-    Article.all.each do |a|
-      if a.created_at.to_date >= date
-        tag_article a
-        a.save
-      end
+    threads_list = []
+    counter = 0
+    for i in 0...new_articles.length do
+      tag_article(Article.where(id: new_articles[i])[0])
+      #article_holder = Article.where(id: new_articles[i])[0]
+      #threads_list[counter] = Thread.new {tag_article(article_holder)}
+      counter += 1
+    end
+    for i in 0...counter do 
+      threads_list[i].join
     end
     # Scrape finished, and redirect to articles
     redirect_to '/articles', notice: 'Succesfully scraped for new articles.'

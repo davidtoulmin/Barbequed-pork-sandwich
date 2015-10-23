@@ -28,9 +28,10 @@ class SBSImporter
   
   # Define a scrape method that saves canned article data to the database
   def scrape
-    collectdata()
+    return collectdata()
   end
   def collectdata
+    article_list = []
     url = @source.url
     #Loop through the response.
     open(url) do |rss|
@@ -55,10 +56,12 @@ class SBSImporter
         #Checking if the article already exists or not.
         if ((Article.find_by title: title) == nil)
           article.save
+          article_list.push(article.id)
         end
 
       end
     end
+    return article_list
   end
   
   def interpret_description description

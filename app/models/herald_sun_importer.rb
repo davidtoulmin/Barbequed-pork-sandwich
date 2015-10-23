@@ -15,6 +15,7 @@ require 'Date'
 
 class HeraldSunImporter
 
+
   def initialize start_date, end_date
     #Defining the instance variable of the source of the article
     @source = Source.find_by(name: source_name)
@@ -28,7 +29,7 @@ class HeraldSunImporter
   # Define the method that is responsible for collecting and interpretting
   # the data.
   def scrape
-    collectdata()
+    return collectdata()
   end
   #This method is responsible for extracting the data from the RSS feed.
   #It accesses it, and parses the RSS file format by accessing desirable
@@ -37,6 +38,7 @@ class HeraldSunImporter
   #Given the RSS feed returns the data in a very accessible form, very little/no
   #interpreting will be required.    
   def collectdata
+    article_list = []
     #Defining the url
     url = 'http://feeds.news.com.au/heraldsun/rss/heraldsun_news_breakingnews_2800.xml'
     url = @source.url
@@ -62,9 +64,11 @@ class HeraldSunImporter
         if ((Article.find_by title: title) == nil)
           #Checking if the article already exists or not.
           article.save
+          article_list.push(article.id)
         end
 
       end
     end
+    return article_list
   end
 end

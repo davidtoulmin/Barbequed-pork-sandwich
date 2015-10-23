@@ -15,6 +15,7 @@ require 'Date'
 
 class SydneyMorningHeraldImporter
 
+
   def initialize start_date, end_date
     #Defining the instance variable to define the source from the database
     @source = Source.find_by(name: source_name)
@@ -27,42 +28,45 @@ class SydneyMorningHeraldImporter
   
   # Define a scrape method that saves canned article data to the database
   def scrape
-    collectdata()
+    return collectdata()
   end
   def collectdata
 
+    article_list = []
     #Define the url, then open it.
     url = @source.url
     open(url) do |rss|
-     feed = RSS::Parser.parse(rss)
-     counter = 0;
-     # for each item in the feed extract data.
-     feed.items.each do |item|
-     #capturing all desired data from all the items in the feed
-     title = item.title
-     link =  item.link
-     # Decription contains a source link, and a image link. As well
-     # Resolving the image link from the description
-     image = interpret_get_image(item.description)
+    feed = RSS::Parser.parse(rss)
+      counter = 0;
+      # for each item in the feed extract data.
+      feed.items.each do |item|
+        #capturing all desired data from all the items in the feed
+        title = item.title
+        link =  item.link
+        # Decription contains a source link, and a image link. As well
+        # Resolving the image link from the description
+        image = interpret_get_image(item.description)
 
-     # Resolving the summary/description from the description item.
-     description = interpret_description(item.description)
-     #There is no author field, as it is latest news. Define the author
-     author = 'SMH'
-     puts(item.pubDate)
-     #converting the Time class returned to a preffered Date object
-     date = (item.pubDate).to_datetime
-     #Defining the source.
-     source = 'Sydney Morning Herald'
-     article = Article.new(title: title, summary: description,
-      source: @source, link: link, pubdate: date, image: image, author: author)
-      #Checking if the article already exists or not.
-     if ((Article.find_by title: title) == nil)
-        #Saving the article to the database.
-        article.save
-     end
+        # Resolving the summary/description from the description item.
+        description = interpret_description(item.description)
+        #There is no author field, as it is latest news. Define the author
+        author = 'SMH'
+        puts(item.pubDate)
+        #converting the Time class returned to a preffered Date object
+        date = (item.pubDate).to_datetime
+        #Defining the source.
+        source = 'Sydney Morning Herald'
+        article = Article.new(title: title, summary: description,
+        source: @source, link: link, pubdate: date, image: image, author: author)
+        #Checking if the article already exists or not.
+        if ((Article.find_by title: title) == nil)
+          #Saving the article to the database.
+          article.save
+          article_list.push(article.id)
+        end
+      end
     end
-   end
+    return article_list
   end
   
   def interpret_description description
