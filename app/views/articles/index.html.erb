@@ -15,8 +15,16 @@
     </div>
   <!--%= will_paginate %-->
 <!--/div-->
-
+<% count = 0 %>
 <% @articles.each do |article| %>
-  <%= render partial: 'index_articles', locals: {article: article} %>
+  <% if count <10 %>
+    <%= render partial: 'index_articles', locals: {article: article} %>
+    <% count = count + 1 %>
+  <% end %>
 <% end %>
 
+<% @articles = @articles.drop(10) %>
+<% if @articles.any? %>
+  <% @array = Array.new {Array.new}%>
+  <%= link_to "Next", 'articles', locals: {:@articles => @articles} %>
+<% end %>
