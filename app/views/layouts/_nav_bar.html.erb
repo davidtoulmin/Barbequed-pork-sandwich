@@ -21,7 +21,6 @@
           <% else %>
           <li><%= link_to "Please Add Interests", edit_user_path(current_user)%></li>
           <% end %>
-          <li><%= link_to 'Fetch new articles', '/get_articles' %></li>
         </ul>
         <div class="navbar-form navbar-right">
           <%= form_tag(articles_path, :method => "get", id: "search-form") do %>
