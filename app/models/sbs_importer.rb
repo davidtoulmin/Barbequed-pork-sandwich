@@ -66,7 +66,7 @@ class SBSImporter
   
   def interpret_description description
     #Splitting the description item to find the 'summary'
-    description = description.split(/(<br)/)[0]
+    description.split(/(<br)/)[0]
   end
   
   def interpret_get_image description
@@ -76,7 +76,7 @@ class SBSImporter
     image = image[0][1].scan(/("(.*?)"){1}/)
     #Finally returning the string with removed quotations which is the exact
     #url link
-    image = image[0][1]
+    image[0][1]
   end
   
 end

@@ -16,9 +16,9 @@ class SessionsController < ApplicationController
       log_in user
       # Redirect to articles page
       redirect_to articles_path
-  else
-    redirect_to :back
-  end
+    else
+      redirect_to :back
+    end
   end
 
   # Log out the user in the session and redirect to the unauth thing

@@ -40,7 +40,6 @@ class HeraldSunImporter
   def collectdata
     article_list = []
     #Defining the url
-    url = 'http://feeds.news.com.au/heraldsun/rss/heraldsun_news_breakingnews_2800.xml'
     url = @source.url
     #opening the RSS feed and handeling any 
     open(url) do |rss|
