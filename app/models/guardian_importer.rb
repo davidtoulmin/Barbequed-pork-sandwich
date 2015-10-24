@@ -10,17 +10,16 @@ require 'net/http'
 
 # Import from Guardian JSON API
 class GuardianImporter
-
   # The Guardian api url
   URL = 'http://content.guardianapis.com/'
   # URL addition for json
   API_KEY = '/search?api-key=a8cmjya9kseh5cvx2k2t6dqn&show-fields=all'
   SUMMARY_SEARCHING_REGEXP = /<("[^"]*"|'[^']*'|[^'">])*>/
-  SOURCE_DESCRIPTION = "The Guardian news api"
-  SOURCE_NAME = "TheGuardian"
+  SOURCE_DESCRIPTION = 'The Guardian news api'
+  SOURCE_NAME = 'TheGuardian'
 
   # A news scrape is initialised with dates to scrape from
-  def initialize start_date, end_date
+  def initialize(start_date, end_date)
     @start = start_date
     @end = end_date
   end
@@ -55,11 +54,7 @@ class GuardianImporter
         # Check uniqueness
         flag = 1
         Article.all.each do |p|
-          if p.title == a_title
-            if p.pubdate == a_date
-              flag = 0
-            end
-          end
+          flag = 0 if p.pubdate == a_date if p.title == a_title
         end
         if flag == 1
           # Save article
@@ -72,6 +67,6 @@ class GuardianImporter
 
       end
     end
-    return processed_articles
+    processed_articles
   end
 end

@@ -10,18 +10,17 @@ require 'net/http'
 
 # Import from NYT JSON API
 class NYTImporter
-  
   # The NY Times api url
   URL = 'http://api.nytimes.com/'
   # Key for retrieving results
   RESULT_KEY = 'results'
   # URL addition for technology json
   API_KEY = '/svc/topstories/v1/technology.json?api-key=545f8930f3a92adfd2018cc65ed06865:6:72784832'
-  SOURCE_DESCRIPTION = "With the Times Newswire API, you can get links and metadata for Times articles and blog posts as soon as they are published on NYTimes.com. The Times Newswire API provides an up-to-the-minute stream of published items."
-  SOURCE_NAME = "NYT"
+  SOURCE_DESCRIPTION = 'With the Times Newswire API, you can get links and metadata for Times articles and blog posts as soon as they are published on NYTimes.com. The Times Newswire API provides an up-to-the-minute stream of published items.'
+  SOURCE_NAME = 'NYT'
 
   # A news scrape is initialised with dates to scrape from
-  def initialize start_date, end_date
+  def initialize(start_date, end_date)
     @start = start_date
     @end = end_date
   end
@@ -45,21 +44,15 @@ class NYTImporter
       date = DateTime.parse item['published_date']
       if (@start < date.to_date) && (@end >= date.to_date)
         image_url = item['multimedia'][0]
-        if(image_url!=nil)
-          image_url=image_url['url']
-        end
-          # Scrape data from source, and check for uniqueness
-        author = item['byline'].gsub('By ','').split(/(\W)/).map(&:capitalize).join
+        image_url = image_url['url'] unless image_url.nil?
+        # Scrape data from source, and check for uniqueness
+        author = item['byline'].gsub('By ', '').split(/(\W)/).map(&:capitalize).join
         flag = 1
         Article.all.each do |p|
-          if p.title == item['title']
-            if p.pubdate == date
-              flag = 0
-            end
-          end
+          flag = 0 if p.pubdate == date if p.title == item['title']
         end
         if flag == 1
-          @article = Article.new()
+          @article = Article.new
           # Select attributes
           @article.title = item['title']
           @article.author = author
@@ -74,6 +67,6 @@ class NYTImporter
         end
       end
     end
-    return article_list
+    article_list
   end
 end

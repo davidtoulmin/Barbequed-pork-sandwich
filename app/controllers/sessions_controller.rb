@@ -1,5 +1,4 @@
 class SessionsController < ApplicationController
-
   # Before actions to check paramters
   before_action :check_params, only: [:login]
   before_action :authenticate_user, only: [:logout]
@@ -28,25 +27,26 @@ class SessionsController < ApplicationController
   end
 
   def email
-     #UserMailer.welcome(current_user).deliver_now
-     User.where(opt_in: true).find_each do |user|
-      #user.update_attribute(:last_emailed, DateTime.now - 200000)
+    # UserMailer.welcome(current_user).deliver_now
+    User.where(opt_in: true).find_each do |user|
+      # user.update_attribute(:last_emailed, DateTime.now - 200000)
       YourMailer.email_name(user).deliver
       user.update_attribute(:last_emailed, DateTime.now)
-     end
-     redirect_to articles_path
-     #@users = User.find_by(opt_in: true)
-     #@users.each do |user|
-      #  YourMailer.email_name(user).deliver
-      #  redirect_to articles_path
-     #end
+    end
+    redirect_to articles_path
+    # @users = User.find_by(opt_in: true)
+    # @users.each do |user|
+    #  YourMailer.email_name(user).deliver
+    #  redirect_to articles_path
+    # end
   end
 
   # Private controller methods
+
   private
+
   def check_params
     params.require(:credentials).permit(:password, :username)
     @credentials = params[:credentials]
   end
-
 end

@@ -9,16 +9,15 @@ require 'rss'
 
 # Import from The Age Politics RSS feed
 class TheAgePoliticsImporter
-
   # URL for RSS feed
   RSS_URL = 'http://www.theage.com.au/rssheadlines/political-news/article/rss.xml'
   SUMMARY_REGEXP = /<p>.+<\/p>/
   IMAGE_REGEXP = /img src="(.+)" width/
-  SOURCE_NAME = "TheAgePolitics"
-  SOURCE_DESCRIPTION = "The Age articles: Latest political news articles. For all the articles, visit http://www.theage.com.au."
+  SOURCE_NAME = 'TheAgePolitics'
+  SOURCE_DESCRIPTION = 'The Age articles: Latest political news articles. For all the articles, visit http://www.theage.com.au.'
 
   # A news scrape is initialised with dates to scrape from
-  def initialize start_date, end_date
+  def initialize(start_date, end_date)
     @start = start_date
     @end = end_date
   end
@@ -32,7 +31,7 @@ class TheAgePoliticsImporter
   def scrape
     article_list = []
     # Open and parse the rss feed
-    url= RSS_URL
+    url = RSS_URL
     open(url) do |rss|
       feed = RSS::Parser.parse(rss, false)
       feed.items.each do |item|
@@ -42,18 +41,14 @@ class TheAgePoliticsImporter
           # Checking for uniqueness
           flag = 1
           Article.all.each do |p|
-            if p.title == item.title
-              if p.pubdate == date
-                flag = 0
-              end
-            end
+            flag = 0 if p.pubdate == date if p.title == item.title
           end
           if flag == 1
-            @article = Article.new()
+            @article = Article.new
             # Select attributes
             @article.title = item.title
             @article.author = nil
-            @article.summary = item.description.gsub(SUMMARY_REGEXP, "")
+            @article.summary = item.description.gsub(SUMMARY_REGEXP, '')
             @article.pubdate = date.to_datetime
             @article.source = source_name
             @article.image = item.description.scan(IMAGE_REGEXP)[0][0]
@@ -65,6 +60,6 @@ class TheAgePoliticsImporter
         end
       end
     end
-    return article_list
+    article_list
   end
 end

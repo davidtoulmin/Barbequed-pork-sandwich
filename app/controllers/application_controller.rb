@@ -7,9 +7,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
 
   def authenticate_user
-    unless current_user
-      redirect_to login_path
-    end
+    redirect_to login_path unless current_user
   end
 
   def navigate_back

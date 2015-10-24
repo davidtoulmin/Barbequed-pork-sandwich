@@ -1,7 +1,6 @@
 module SessionsHelper
-
   # Log a user in after authenticating, store in session
-  def log_in user
+  def log_in(user)
     session[:user_id] = user.id
   end
 
@@ -14,5 +13,4 @@ module SessionsHelper
   def log_out
     session[:user_id] = nil
   end
-
 end

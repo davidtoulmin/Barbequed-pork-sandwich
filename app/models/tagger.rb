@@ -3,10 +3,8 @@
 # David Toulmin 638541
 
 module Tagger
-
   # Return a list of taggers to tag with
   def taggers
     [TagOpenCalais, TagAlchemy, TagSentimental, TagSummaryNouns, TagTitleNouns]
   end
-
 end

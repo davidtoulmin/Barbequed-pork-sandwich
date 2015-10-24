@@ -20,8 +20,6 @@ class UsersController < ApplicationController
 
   # GET /users/edit
   def edit
-
-
   end
 
   # user /users
@@ -69,19 +67,18 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = current_user
-    end
 
-    def check_valid
-      unless @user==current_user
-        redirect_to articles_path
-      end
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = current_user
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :bio, :username, :password, :password_confirmation, :interest_list,:opt_in,:last_emailed)
-    end
+  def check_valid
+    redirect_to articles_path unless @user == current_user
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :bio, :username, :password, :password_confirmation, :interest_list, :opt_in, :last_emailed)
+  end
 end
