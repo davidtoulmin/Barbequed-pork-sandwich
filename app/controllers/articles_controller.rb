@@ -9,24 +9,65 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
-    #@articles = Article.all.reverse
-    #Ensuring all articles are displayed from most recent first.
-    @articles = Article.all
+    # If a search has been made
     if params[:search]
-      #@articles = Article.tagged_with(params[:search], :any => true)
-      #@articles = Article.find(:all, :conditions => ["name LIKE ?", "%#{params[:search]}%"])
-      #@articles = Article.all.find_by(tag_list: params[:search])#.order("created_at DESC")
+      # Initially sorts articles by pubdate, ideally should handle the case of equal weights later on
+      # We do sort by date again to be 100% sure of functionality however
+      @articles = Article.all.sort_by { |article| article.pubdate }.reverse
+      # Split keywords into an array
+      keywords = params[:search].split(" ")
+      # Initialise variables for search functionality
+      num_articles = Article.all.length
+      weights = Array.new(num_articles) {Array.new(2)}
+      counter=0
+      @articles.each do |article|
+        weights[counter][0] = article
+        weights[counter][1] = 0
+        current_weight = 0
+        prev_weight = 0
+        # Loop over each keyword
+        keywords.each do |keyword|
+          if article.tag_list.include? keyword
+            weights[counter][1] += 4
+          end
+          if article.title.include? keyword # try params[:search].in? article.title
+            weights[counter][1] += 3
+          end
+          if article.summary.include? keyword
+            weights[counter][1] += 2
+          end
+          if article.source.name.include? keyword
+            weights[counter][1] += 1
+          end
+          # Check to see if a keyword appeared at all
+          current_weight = weights[counter][1]
+          if current_weight==prev_weight
+            # A keyword didn't appear anywhere, so we don't want to include this article
+            # Set the weight to 0, and do not search for anymore keywords
+            weights[counter][1] = 0 
+            break
+          else
+            prev_weight=current_weight
+          end
+        end
+        # Increment article
+        counter += 1
+      end
+      # Sort articles by weight in descending order
+      weights = weights.sort_by { |article| [article[1], article[0].pubdate]}.reverse
+      weighted_articles = []
+      for i in 0..num_articles-1
+        # Exclude articles that had zero weight
+        if weights[i][1]!=0
+          weighted_articles[i] = weights[i][0] #accesses article within weights
+        end
+      end
+      # Set weighted articles to articles attribute, ready for rendering
+      @articles = weighted_articles
     else
-      
-      #@articles = Article.paginate(:page => params[:page], :per_page => 10)
+      # Display all articles
+      @articles = Article.all.sort_by { |article| article.pubdate }.reverse
     end
-    #Display 10 articles per page
-    
-
-    
-
-
-    @articles = Article.all.sort_by { |article| article.pubdate }.reverse
   end
 
   def my_interests
