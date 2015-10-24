@@ -21,5 +21,6 @@ Rails.application.routes.draw do
   patch '/user', to: 'users#update', as: 'user_edit'
   get 'sessions/email', as: :email
   get '/admin/email', to: 'sessions#email', as: :email_admin
+  get '/next_page', to: 'articles#next_page', as: 'next_page_route'
 
 end

@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<%if params[:search] %>
+<h1>Showing results for: <%= params[:search] %></h1>
+<%else%>
+<h1>All Articles</h1>
+<%end%>
+
+<!--div class="digg_pagination"-->
+    <div class="page_info">
+      <!--%= page_entries_info @posts %-->
+    </div>
+  <!--%= will_paginate %-->
+<!--/div-->
+<!--Trying to do stuff -->
+<% count = 0 %>
+<% @articles.each do |article| %>
+  <% if count <10 %>
+    <%= render partial: 'index_articles', locals: {article: article} %>
+    <% count = count + 1 %>
+  <% end %>
+<% end %>
+<% @articles = @articles.drop(10) %>
+<% if @articles.any? %>
+  <%= link_to "Next", 'articles', locals: {@articles => @articles} %>
+<% end %>

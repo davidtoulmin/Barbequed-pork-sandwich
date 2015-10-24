@@ -2,7 +2,7 @@ class ArticlesController < ApplicationController
   before_action :set_article, only: [:show]
   before_action :authenticate_user
   
-  include Importer
+  require_relative "../models/importer.rb"
   include Tagger
   #require 'will_paginate/array'
 
@@ -68,8 +68,16 @@ class ArticlesController < ApplicationController
       # Display all articles
       @articles = Article.all.sort_by { |article| article.pubdate }.reverse
     end
+
+    if params[:next] != ''
+      for i in 1..params[:next].to_i
+      @articles = @articles.drop(10)
+      end
+    end
+    
   end
 
+  
   def my_interests
     @articles = Article.tagged_with(current_user.interest_list, :any => true).to_a
     render 'index'
@@ -95,7 +103,7 @@ class ArticlesController < ApplicationController
     end
     # Itterate through importers, initialising them, and scraping
     new_articles = []
-    importers.each do |importer_klass|
+    Importer.importers.each do |importer_klass|
       imp = importer_klass.new(date, Date.today)
       new_articles.concat(imp.scrape)
     end
