@@ -2,7 +2,7 @@ class ArticlesController < ApplicationController
   before_action :set_article, only: [:show]
   before_action :authenticate_user
   
-  require_relative "../models/importer.rb"
+  include Importer
   include Tagger
   #require 'will_paginate/array'
 
@@ -103,21 +103,41 @@ class ArticlesController < ApplicationController
     end
     # Itterate through importers, initialising them, and scraping
     new_articles = []
-    Importer.importers.each do |importer_klass|
+    importers.each do |importer_klass|
       imp = importer_klass.new(date, Date.today)
       new_articles.concat(imp.scrape)
     end
-    threads_list = []
-    counter = 0
+    #threads_list = []
+    #counter = 0
     for i in 0...new_articles.length do
-      tag_article(Article.where(id: new_articles[i])[0])
+      article_holder = Article.where(id: new_articles[i])[0]
+      #threads_list[counter] = Thread.new {
+      tags=[]
+      list = ""
+      tggr_count = 0
+      tag_threads_list = []
+      taggers.each do |tagger_klass|
+        tag_threads_list[tggr_count] = Thread.new {tggr = tagger_klass.new(article_holder)
+        tags.push(tggr.tag())}
+        tggr_count += 1
+      end
+      for i in 0...tggr_count do
+        tag_threads_list[i].join
+      end
+      tags.flatten!
+      tags.uniq.each do |word|
+        list += word + ", "
+      end
+      article_holder.tag_list = list
+      article_holder.save
+      #tag_article(Article.where(id: new_articles[i])[0])
       #article_holder = Article.where(id: new_articles[i])[0]
       #threads_list[counter] = Thread.new {tag_article(article_holder)}
-      counter += 1
+      #counter += 1
     end
-    for i in 0...counter do 
-      threads_list[i].join
-    end
+    #for i in 0...counter do 
+    #  threads_list[i].join
+    #end
     # Scrape finished, and redirect to articles
     redirect_to '/articles', notice: 'Succesfully scraped for new articles.'
   end
