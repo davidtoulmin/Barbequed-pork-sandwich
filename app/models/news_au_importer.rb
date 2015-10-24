@@ -7,17 +7,15 @@ require 'Date'
 require 'rss'
 require 'open-uri'
 
-
 # Import from NewsAU RSS
 class NewsAUImporter
-
   # URL for RSS feed
   URL = 'http://feeds.news.com.au/public/rss/2.0/news_national_3354.xml'
-  SOURCE_NAME = "NewsAU"
-  SOURCE_DESCRIPTION = "News.com.au  National: National News Headlines and Australian News from around the Nation"
+  SOURCE_NAME = 'NewsAU'
+  SOURCE_DESCRIPTION = 'News.com.au  National: National News Headlines and Australian News from around the Nation'
 
   # A news scrape is initialised with dates to scrape from
-  def initialize start_date, end_date
+  def initialize(start_date, end_date)
     @start = start_date
     @end = end_date
   end
@@ -30,7 +28,7 @@ class NewsAUImporter
   # Scrape the source for news articles between the given dates
   def scrape
     article_list = []
-    #open the rss feed
+    # open the rss feed
     open(URL) do |rss|
       feed = RSS::Parser.parse(rss)
       feed.items.each do |item|
@@ -40,23 +38,19 @@ class NewsAUImporter
           # Check uniqueness
           flag = 1
           Article.all.each do |p|
-            if p.title == item.title
-              if p.pubdate == date
-                flag = 0
-              end
-            end
+            flag = 0 if p.pubdate == date if p.title == item.title
           end
           if flag == 1
             # Save article with selected attributes
-            @article = Article.new( image: item.enclosure.url, title: item.title,
-                                       summary: item.description, source: source_name,
-                                       link: item.link, pubdate: date)
+            @article = Article.new(image: item.enclosure.url, title: item.title,
+                                   summary: item.description, source: source_name,
+                                   link: item.link, pubdate: date)
             @article.save
             article_list.push(@article.id)
           end
         end
       end
     end
-    return article_list
+    article_list
   end
 end

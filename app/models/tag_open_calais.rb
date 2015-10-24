@@ -3,11 +3,10 @@ require 'bundler/setup'
 require 'open_calais'
 
 class TagOpenCalais
-
   TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
 
   # A tagging method based on the summary
-  def initialize article
+  def initialize(article)
     @article = article
   end
 
@@ -15,7 +14,7 @@ class TagOpenCalais
   def tag
     tags = []
     begin
-      article1 = @article.summary + " " + @article.title
+      article1 = @article.summary + ' ' + @article.title
       oc = OpenCalais::Client.new(api_key: OPEN_CALAIS_API_KEY)
       oc_response = oc.enrich article1
       oc_response.tags.each { |t| tags.push "#{t[:name]}" }
@@ -27,6 +26,6 @@ class TagOpenCalais
       # that exception
     end
 
-    return tags
+    tags
   end
 end

@@ -7,7 +7,5 @@ class Article < ActiveRecord::Base
   acts_as_taggable
 
   # Sets 10 articles per page
-  #self.per_page = 10
-
-
+  # self.per_page = 10
 end

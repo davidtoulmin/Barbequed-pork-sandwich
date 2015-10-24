@@ -1,9 +1,8 @@
 class TagSummaryNouns
-
   TAG_SEARCH_REGEXP = /([A-Z][a-z]+)/
 
   # A tagging method based on the summary
-  def initialize article
+  def initialize(article)
     @article = article
   end
 
@@ -15,6 +14,6 @@ class TagSummaryNouns
     tag_data.each do |word|
       tags.push word[0]
     end
-    return tags
+    tags
   end
 end

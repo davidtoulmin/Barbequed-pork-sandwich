@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  
   # Root is the unauthenticated path
   root 'sessions#unauth'
 
@@ -14,13 +13,12 @@ Rails.application.routes.draw do
   get '/admin/scrape', to: 'articles#refresh'
   get '/interests', to: 'articles#my_interests', as: 'interests'
   # Resourceful routes for user
-  resource :user, only: [:create,:new,:update,:destroy,:edit]
+  resource :user, only: [:create, :new, :update, :destroy, :edit]
   get '/user/new', to: 'users#new', as: 'users'
   post '/user/new', to: 'users#create', as: 'users_new'
   get '/user/destroy', to: 'users#destroy', as: 'users_destroy'
   patch '/user', to: 'users#update', as: 'user_edit'
   get 'sessions/email', as: :email
-  get '/admin/email', to: 'sessions#email', as: :email_admin
+  get '/admin/email', to: 'users#email', as: :email_admin
   get '/next_page', to: 'articles#next_page', as: 'next_page_route'
-
 end
