@@ -26,25 +26,6 @@ class SessionsController < ApplicationController
     redirect_to login_path
   end
 
-  def email
-<<<<<<< HEAD
-     User.where(opt_in: true).find_each do |user|
-      #user.update_attribute(:last_emailed, DateTime.now - 200000)
-      YourMailer.email_name(user).deliver
-      user.update_attribute(:last_emailed, DateTime.now)
-     end
-     redirect_to articles_path
-=======
-    # UserMailer.welcome(current_user).deliver_now
-    User.where(opt_in: true).find_each do |user|
-      # user.update_attribute(:last_emailed, DateTime.now - 200000)
-      YourMailer.email_name(user).deliver
-      user.update_attribute(:last_emailed, DateTime.now)
-    end
-    redirect_to articles_path
-
->>>>>>> origin/master
-  end
 
   # Private controller methods
 
