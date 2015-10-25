@@ -65,10 +65,23 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  # Method responsible for sending the emails in response to the request
+  # admin/email.
   def email
+     # Finds a list of all users that are opted in for email newsfeeds
      User.where(opt_in: true).find_each do |user|
+      # For each user, send the email called 'email_name'
+      # to that user and deliver it now.
+      # The email that will be sent is stored as a view
+      # your_mailer views, called email_name.html.erb
+      # this particular view shows the structure of the email
+      # that will be sent.
+      # The logic for which articles to be sent to each user is stored
+      # in this embedded ruby html file.
       YourMailer.email_name(user).deliver
+      # Update the last_emailed user attribute to avoid
+      # the clash of being sent articles you've been emailed
+      # before.
       user.update_attribute(:last_emailed, DateTime.now)
      end
      redirect_to articles_path
