@@ -28,7 +28,7 @@ class ArticlesController < ApplicationController
         # Loop over each keyword
         keywords.each do |keyword|
           weights[counter][1] += 4 if article.tag_list.include? keyword
-          weights[counter][1] += 3 if article.title.include? keyword # try params[:search].in? article.title
+          weights[counter][1] += 3 if article.title.include? keyword
           weights[counter][1] += 2 if article.summary.include? keyword
           weights[counter][1] += 1 if article.source.name.include? keyword
           # Check to see if a keyword appeared at all
@@ -119,15 +119,8 @@ class ArticlesController < ApplicationController
       end
       article_holder.tag_list = list
       article_holder.save
-      # tag_article(Article.where(id: new_articles[i])[0])
-      # article_holder = Article.where(id: new_articles[i])[0]
-      # threads_list[counter] = Thread.new {tag_article(article_holder)}
-      # counter += 1
     end
-    # for i in 0...counter do
-    #  threads_list[i].join
-    # end
-    # Scrape finished, and redirect to articles
+
     redirect_to '/articles', notice: 'Succesfully scraped for new articles.'
   end
 
